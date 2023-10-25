@@ -12,6 +12,7 @@
         <module>account</module>
         <module>product</module>
         <module>store-service-discovery</module>
+        <module>store-gateway</module>
     </modules>
 
     <parent>

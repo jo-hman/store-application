@@ -1,0 +1,21 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: GATEWAY
+
+  cloud:
+    gateway:
+      routes:
+        - id: account
+          uri: lb://ACCOUNT
+          predicates:
+            - Path=/accounts/**
+
+        - id: product
+          uri: lb://PRODUCT
+          predicates:
+            - Path=/products/**
+          filters:
+            - ServiceAuthFilter
