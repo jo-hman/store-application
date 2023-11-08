@@ -1,6 +1,6 @@
 package com.jochmen.account.service;
 
-import com.jochmen.account.controller.schema.response.AccessCode;
+import com.jochmen.account.controller.schema.response.AccessCodeResponse;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -18,13 +18,13 @@ public class AccessCodeService {
     private static final String SECRET = "123981723987129837189273981273981723981723987123";
     private static final int EXPIRATION_MILLIS = 60 * 60 * 1000;
 
-    public AccessCode createAccessCode(UUID accountId) {
+    public AccessCodeResponse createAccessCode(UUID accountId) {
         String accessCode = Jwts.builder()
                 .setSubject(accountId.toString())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_MILLIS))
                 .signWith(getKey(), SignatureAlgorithm.HS256).compact();
-        return new AccessCode(accessCode);
+        return new AccessCodeResponse(accessCode);
     }
 
     private Key getKey() {
@@ -32,9 +32,9 @@ public class AccessCodeService {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public Optional<UUID> verifyAccessCode(AccessCode accessCode) {
+    public Optional<UUID> verifyAccessCode(AccessCodeResponse accessCodeResponse) {
         try {
-            var claims = Jwts.parserBuilder().setSigningKey(getKey()).build().parseClaimsJws(accessCode.jwt());
+            var claims = Jwts.parserBuilder().setSigningKey(getKey()).build().parseClaimsJws(accessCodeResponse.jwt());
             var accountId = UUID.fromString(claims.getBody().getSubject());
             return Optional.of(accountId);
         } catch (Exception e) {

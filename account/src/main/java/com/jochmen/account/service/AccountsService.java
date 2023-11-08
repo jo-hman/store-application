@@ -1,13 +1,13 @@
 package com.jochmen.account.service;
 
-import com.jochmen.account.controller.schema.response.AccessCode;
-import com.jochmen.account.controller.schema.request.Account;
+import com.jochmen.account.controller.schema.response.AccessCodeResponse;
+import com.jochmen.account.controller.schema.request.AccountCreationRequest;
 import com.jochmen.account.repository.AccountDatabaseEntity;
 import com.jochmen.account.repository.AccountsRepository;
-import com.netflix.appinfo.ApplicationInfoManager;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class AccountsService {
@@ -20,7 +20,7 @@ public class AccountsService {
         this.accessCodeService = accessCodeService;
     }
 
-    public Optional<AccessCode> createAccount(Account account) {
+    public Optional<AccessCodeResponse> createAccount(AccountCreationRequest account) {
         if (accountsRepository.existsByEmail(account.email())) {
             return Optional.empty();
         }
@@ -28,13 +28,13 @@ public class AccountsService {
         return Optional.of(accessCodeService.createAccessCode(accountEntity.getId()));
     }
 
-    public boolean isAccessCodeValid(AccessCode accessCode) {
-        return accessCodeService.verifyAccessCode(accessCode)
-                .map(accountsRepository::existsById)
-                .orElse(false);
+    public Optional<UUID> isAccessCodeValid(AccessCodeResponse accessCodeResponse) {
+        return accessCodeService.verifyAccessCode(accessCodeResponse)
+                .flatMap(accountsRepository::findById)
+                .map(AccountDatabaseEntity::getId);
     }
 
-    public Optional<AccessCode> createToken(Account account) {
+    public Optional<AccessCodeResponse> createToken(AccountCreationRequest account) {
         return accountsRepository.findByEmailAndPassword(account.email(), account.password())
                 .map(accountDatabaseEntity -> accessCodeService.createAccessCode(accountDatabaseEntity.getId()));
     }
