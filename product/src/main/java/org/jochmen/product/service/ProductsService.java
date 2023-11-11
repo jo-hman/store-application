@@ -37,4 +37,8 @@ public class ProductsService {
     public List<ProductDatabaseEntity> getProducts(UUID accountId) {
         return productsRepository.findAllByAccountId(accountId);
     }
+
+    public List<ProductDatabaseEntity> getProducts() {
+        return productsRepository.findAll();
+    }
 }

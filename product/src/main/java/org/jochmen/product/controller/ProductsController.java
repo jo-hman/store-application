@@ -1,5 +1,7 @@
 package org.jochmen.product.controller;
 
+import jakarta.ws.rs.DefaultValue;
+import jakarta.ws.rs.QueryParam;
 import org.jochmen.product.controller.schema.request.ProductCreationRequest;
 import org.jochmen.product.controller.schema.response.ProductIdResponse;
 import org.jochmen.product.controller.schema.response.ProductResponse;
@@ -31,10 +33,17 @@ public class ProductsController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProductResponse>> getProducts(@RequestHeader(ACCOUNT_HEADER) String accountId) {
-        return ResponseEntity.ok(productsService.getProducts(UUID.fromString(accountId)).stream()
+    public ResponseEntity<List<ProductResponse>> getProducts(@QueryParam("myProducts") @DefaultValue("false") boolean myProducts,
+                                                             @RequestHeader(ACCOUNT_HEADER) String accountId) {
+        return ResponseEntity.ok(getMyProductsOrAll(myProducts, accountId).stream()
                 .map(mapProductDatabaseEntityToProductResponse())
                 .toList());
+    }
+
+    private List<ProductDatabaseEntity> getMyProductsOrAll(boolean myProducts, String accountId) {
+        return myProducts
+                ? productsService.getProducts(UUID.fromString(accountId))
+                : productsService.getProducts();
     }
 
     @GetMapping("/{id}")
@@ -56,7 +65,7 @@ public class ProductsController {
     }
 
     private static Function<ProductDatabaseEntity, ProductResponse> mapProductDatabaseEntityToProductResponse() {
-        return productDatabaseEntity -> new ProductResponse(productDatabaseEntity.getId(), productDatabaseEntity.getName());
+        return productDatabaseEntity -> new ProductResponse(productDatabaseEntity.getId(), productDatabaseEntity.getName(), productDatabaseEntity.getAccountId());
     }
 
 }

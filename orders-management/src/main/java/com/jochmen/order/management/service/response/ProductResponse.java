@@ -1,4 +1,4 @@
-package org.jochmen.product.controller.schema.response;
+package com.jochmen.order.management.service.response;
 
 import java.util.UUID;
 

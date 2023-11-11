@@ -12,10 +12,39 @@ spring:
           uri: lb://ACCOUNT
           predicates:
             - Path=/accounts/**
-
+          metadata:
+            cors:
+              allowedOrigins: '*'
+              allowedMethods:
+                - GET
+                - POST
+              allowedHeaders: '*'
+              maxAge: 30
         - id: product
           uri: lb://PRODUCT
           predicates:
             - Path=/products/**
           filters:
             - ServiceAuthFilter
+          metadata:
+            cors:
+              allowedOrigins: '*'
+              allowedMethods:
+                - GET
+                - POST
+              allowedHeaders: '*'
+              maxAge: 30
+        - id: order-management
+          uri: lb://ORDER
+          predicates:
+            - Path=/orders/**
+          filters:
+            - ServiceAuthFilter
+          metadata:
+            cors:
+              allowedOrigins: '*'
+              allowedMethods:
+                - GET
+                - POST
+              allowedHeaders: '*'
+              maxAge: 30
