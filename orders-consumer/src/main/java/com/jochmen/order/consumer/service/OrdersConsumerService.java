@@ -9,7 +9,8 @@ public class OrdersConsumerService {
 
     @RabbitListener(queues = "ordersQueue")
     public void listen(OrderMessage orderMessage) {
-        System.out.println("Message arrived from ordersQueue: " + orderMessage.productId() + " " + orderMessage.accountId());
+        //todo REST call to product module to assign product
+        System.out.println("Message arrived from ordersQueue: " + orderMessage.productIds() + " " + orderMessage.accountId());
     }
 
 }

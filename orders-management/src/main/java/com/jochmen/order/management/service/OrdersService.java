@@ -38,13 +38,22 @@ public class OrdersService {
                 .retrieve()
                 .bodyToMono(new ParameterizedTypeReference<List<ProductResponse>>(){})
                 .map(products -> products.stream()
-                        .anyMatch(productResponse -> productResponse.id().equals(orderRequest.productId()) && !productResponse.accountID().equals(accountId)))
+                        .anyMatch(productResponse -> orderRequest.productIds().stream()
+                                .anyMatch(productId -> productResponse.id().equals(productId) && !productResponse.accountID().equals(accountId))))
                 .onErrorReturn(false)
                 .block());
 
         if (canProductBeOrdered) {
-            ordersRepository.save(new OrderDatabaseEntity(orderRequest.productId(), accountId));
-            rabbitTemplate.convertAndSend(ORDERS_QUEUE_NAME, new OrderMessage(orderRequest.productId(), accountId));
+            var orders = orderRequest.productIds().stream()
+                    .map(productId -> new OrderDatabaseEntity(productId, accountId))
+                    .toList();
+            ordersRepository.saveAll(orders);
+
+            rabbitTemplate.convertAndSend(ORDERS_QUEUE_NAME,
+                    new OrderMessage(orders.stream()
+                        .map(OrderDatabaseEntity::getProductId)
+                        .toList(), accountId)
+            );
         }
         return canProductBeOrdered;
     }

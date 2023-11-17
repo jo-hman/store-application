@@ -21,7 +21,7 @@ public class OrdersManagementConfiguration {
 
     @Bean
     public Queue ordersQueue() {
-        return new Queue("ordersQueue", false);
+        return new Queue("ordersQueue", true);
     }
 
     @Bean
