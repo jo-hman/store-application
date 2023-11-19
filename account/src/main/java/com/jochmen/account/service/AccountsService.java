@@ -4,11 +4,13 @@ import com.jochmen.account.controller.schema.response.AccessCodeResponse;
 import com.jochmen.account.controller.schema.request.AccountCreationRequest;
 import com.jochmen.account.repository.AccountDatabaseEntity;
 import com.jochmen.account.repository.AccountsRepository;
+import io.micrometer.observation.annotation.Observed;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.UUID;
 
+@Observed(name = "accountsService")
 @Service
 public class AccountsService {
 

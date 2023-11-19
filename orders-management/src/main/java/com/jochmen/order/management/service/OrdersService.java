@@ -5,6 +5,7 @@ import com.jochmen.order.management.repository.OrderDatabaseEntity;
 import com.jochmen.order.management.repository.OrdersRepository;
 import com.jochmen.order.management.service.message.OrderMessage;
 import com.jochmen.order.management.service.response.ProductResponse;
+import io.micrometer.observation.annotation.Observed;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import java.util.List;
 import java.util.UUID;
 
+@Observed(name = "ordersService")
 @Service
 public class OrdersService {
 

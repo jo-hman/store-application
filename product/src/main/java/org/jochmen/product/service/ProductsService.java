@@ -1,5 +1,6 @@
 package org.jochmen.product.service;
 
+import io.micrometer.observation.annotation.Observed;
 import org.jochmen.product.controller.schema.request.ProductCreationRequest;
 import org.jochmen.product.repository.ProductDatabaseEntity;
 import org.jochmen.product.repository.ProductsRepository;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Observed(name = "productsService")
 @Service
 public class ProductsService {
 

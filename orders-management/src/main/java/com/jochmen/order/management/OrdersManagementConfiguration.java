@@ -1,5 +1,9 @@
 package com.jochmen.order.management;
 
+import io.micrometer.core.instrument.observation.DefaultMeterObservationHandler;
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
+import io.micrometer.observation.ObservationRegistry;
+import io.micrometer.observation.aop.ObservedAspect;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
@@ -27,5 +31,12 @@ public class OrdersManagementConfiguration {
     @Bean
     public Jackson2JsonMessageConverter jsonMessageConverter() {
         return new Jackson2JsonMessageConverter();
+    }
+
+    @Bean
+    public ObservedAspect observedAspect(ObservationRegistry observationRegistry) {
+        var meterRegistry = new SimpleMeterRegistry();
+        observationRegistry.observationConfig().observationHandler(new DefaultMeterObservationHandler(meterRegistry));
+        return new ObservedAspect(observationRegistry);
     }
 }
