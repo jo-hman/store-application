@@ -84,10 +84,3 @@ services:
         target: /etc/rabbitmq/definitions.json
     networks:
       - store-network
-
-  jenkins:
-    image: jenkins/jenkins:jdk17
-    ports:
-      - "8081:8080"
-    networks:
-        - store-network
