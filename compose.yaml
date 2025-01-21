@@ -74,13 +74,13 @@ services:
       - RABBITMQ_DEFAULT_VHOST=/
     volumes:
       - type: bind
-        source: ./docker/rabbitmq-enabled-plugins
+        source: /tmp/rabbitmq-enabled-plugins
         target: /etc/rabbitmq/enabled_plugins
       - type: bind
-        source: ./docker/rabbitmq.config
+        source: /tmp/rabbitmq.config
         target: /etc/rabbitmq/rabbitmq.conf
       - type: bind
-        source: ./docker/rabbitmq-defs.json
+        source: /tmp/rabbitmq-defs.json
         target: /etc/rabbitmq/definitions.json
     networks:
       - store-network
