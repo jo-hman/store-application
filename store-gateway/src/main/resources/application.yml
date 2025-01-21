@@ -48,3 +48,9 @@ spring:
                 - POST
               allowedHeaders: '*'
               maxAge: 30
+eureka:
+  client:
+    service-url:
+      defaultZone: http://store-service-discovery:8761/eureka/
+  instance:
+    prefer-ip-address: true

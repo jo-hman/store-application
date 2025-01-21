@@ -4,4 +4,14 @@ server:
 spring:
   application:
     name: ORDER_CONSUMER
-
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: user
+    password: password
+eureka:
+  client:
+    service-url:
+      defaultZone: http://store-service-discovery:8761/eureka/
+  instance:
+    prefer-ip-address: true

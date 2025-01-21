@@ -12,7 +12,11 @@ spring:
     driverClassName: org.h2.Driver
     jpa:
       spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
-
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: user
+    password: password
 management:
   server:
     port: 7085
@@ -23,3 +27,9 @@ management:
   endpoint:
     health:
       show-details: always
+eureka:
+  client:
+    service-url:
+      defaultZone: http://store-service-discovery:8761/eureka/
+  instance:
+    prefer-ip-address: true
