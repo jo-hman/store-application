@@ -2,11 +2,6 @@ eureka:
     client:
       enabled: false
 spring:
-  rabbitmq:
-    host: rabbitmq
-    port: 5672
-    username: guest
-    password: guest
   cloud:
     loadbalancer:
       ribbon:
