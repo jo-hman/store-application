@@ -32,16 +32,18 @@ public class OrdersService {
     }
 
     public boolean createOrder(OrderRequest orderRequest, UUID accountId) {
-        var canProductBeOrdered =  Boolean.TRUE.equals(productsWebClient.build().get()
+        var canProductBeOrdered = Boolean.TRUE.equals(productsWebClient.build().get()
                 .uri(uriBuilder -> uriBuilder
                         .pathSegment("products")
                         .build())
-                        .header("account-header", accountId.toString())
+                .header("account-header", accountId.toString())
                 .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<List<ProductResponse>>(){})
+                .bodyToMono(new ParameterizedTypeReference<List<ProductResponse>>() {
+                })
                 .map(products -> products.stream()
                         .anyMatch(productResponse -> orderRequest.productIds().stream()
                                 .anyMatch(productId -> productResponse.id().equals(productId) && !productResponse.accountID().equals(accountId))))
+                .log()
                 .onErrorReturn(false)
                 .block());
 
@@ -53,8 +55,8 @@ public class OrdersService {
 
             rabbitTemplate.convertAndSend(ORDERS_QUEUE_NAME,
                     new OrderMessage(orders.stream()
-                        .map(OrderDatabaseEntity::getProductId)
-                        .toList(), accountId)
+                            .map(OrderDatabaseEntity::getProductId)
+                            .toList(), accountId)
             );
         }
         return canProductBeOrdered;
