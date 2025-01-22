@@ -73,14 +73,9 @@ services:
       - RABBITMQ_DEFAULT_PASS=password
       - RABBITMQ_DEFAULT_VHOST=/
     volumes:
-      - type: bind
-        source: ./docker/rabbitmq-enabled-plugins
-        target: /etc/rabbitmq/enabled_plugins
-      - type: bind
-        source: ./docker/rabbitmq.config
-        target: /etc/rabbitmq/rabbitmq.conf
-      - type: bind
-        source: ./docker/rabbitmq-defs.json
-        target: /etc/rabbitmq/definitions.json
+      - rabbitmq-config-volume:/etc/rabbitmq/
     networks:
       - store-network
+
+volumes:
+  rabbitmq-config-volume:
