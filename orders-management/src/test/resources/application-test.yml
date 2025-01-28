@@ -2,6 +2,11 @@ eureka:
     client:
       enabled: false
 spring:
+  rabbitmq:
+    host: localhost
+    username: guest
+    password: guest
+    virtual-host: /
   cloud:
     loadbalancer:
       ribbon:
