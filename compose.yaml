@@ -40,7 +40,7 @@ services:
       - store-service-discovery
     image: store-gateway:1.0-SNAPSHOT
     ports:
-      - "8080:8080"
+      - "8081:8080"
     environment:
       - SPRING_PROFILES_ACTIVE=dev
     networks:
